@@ -10,6 +10,8 @@ const PromptCard = ({ post, handleTagClick, handleDelete, handleEdit }) => {
   const pathName = usePathname();
   const [copied, setCopied] = useState("");
 
+  const tags = post?.tag.split(",").map((tag) => tag.trim());
+
   const handleCopy = () => {
     setCopied(post.prompt);
     navigator.clipboard.writeText(post.prompt);
@@ -52,12 +54,17 @@ const PromptCard = ({ post, handleTagClick, handleDelete, handleEdit }) => {
       </div>
 
       <p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
-      <p
-        className="font-inter text-sm blue_gradient cursor-pointer"
-        onClick={() => handleTagClick && handleTagClick(post.tag)}
-      >
-        #{post.tag}
-      </p>
+
+      {tags.map((tag, index) => (
+        <div key={index} className="inline-block m-1">
+          <p
+            className="font-inter text-sm blue_gradient cursor-pointer"
+            onClick={() => handleTagClick && handleTagClick(tag)}
+          >
+            #{tag}
+          </p>
+        </div>
+      ))}
 
       {session?.user.id === post?.creator._id && pathName === "/profile" && (
         <div className="mt-5 flex-center gap-3 pt-3 border-t border-gray-200">
