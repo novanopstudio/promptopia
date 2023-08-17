@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import MyProfile from "@components/profile";
+import MyProfile from "@components/Profile";
 
 const ProfilePage = () => {
   const { data: session } = useSession();
