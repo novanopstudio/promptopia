@@ -3,12 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const PromptCard = ({ post, handleTagClick, handleDelete, handleEdit }) => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const [copied, setCopied] = useState("");
+  const router = useRouter();
 
   const tags = post?.tag.split(",").map((tag) => tag.trim());
 
@@ -18,10 +19,19 @@ const PromptCard = ({ post, handleTagClick, handleDelete, handleEdit }) => {
     setTimeout(() => setCopied(""), 3000);
   };
 
+  const handleProfileClick = () => {
+    if (post.creator._id === session?.user.id) return router.push("/profile");
+
+    router.push(`/profile/${post.creator._id}?name=${post.creator.username}`);
+  };
+
   return (
     <div className="prompt_card">
       <div className="flex justify-between item-start gap-5">
-        <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
+        <div
+          className="flex-1 flex justify-start items-center gap-3 cursor-pointer"
+          onClick={handleProfileClick}
+        >
           <Image
             src={post.creator.image}
             alt="user-image"
